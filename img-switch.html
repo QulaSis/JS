@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>图片切换</title>
+		<style type="text/css">
+			* {margin: o;padding: 0;}
+			a {text-decoration: none;}
+			.container {margin: 0 auto;text-align: center;width: 580px;}
+			.img {position: relative;background: #ECECEC;}
+			.prev,.next {position: absolute;top: 40%;background: rgba(0,0,0,.3);text-align: center;width: 45px;height: 45px;line-height: 45px;color: #fff;font-size: 36px;}
+			.prev {left: 0;}
+			.next {right: 0;}
+			#num, #text {position: absolute;background: rgba(0,0,0,.5);height: 30px;line-height: 30px;width: 100%;margin: 0;color: #fff;}
+			#num {top: 0;}
+			#text {bottom: 0;}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<input type="button" value="循环切换" />
+			<input type="button" value="顺序切换" />
+			<p>图片可从最后一张跳转到第一张循环切换</p>
+			<div class="img">
+				<span id="num">数量计算中...</span>
+				<img src="" alt="" width="580px"/>
+				<a href="javascript:;" class="prev"><</a>
+				<a href="javascript:;" class="next">></a>
+				<p id="text">文字加载中...</p>
+			</div>
+		</div>
+		<script type="text/javascript">
+			window.onload = function() {
+				var aBtn = document.getElementsByTagName('input');
+				var num = document.getElementById('num');
+				var text = document.getElementById('text');
+				var oA = document.getElementsByTagName('a');
+				var oImg = document.querySelector('img');
+				var oP = document.querySelectorAll('p');
+				
+				var imgArr = ['../img/1.jpg','../img/2.jpg','../img/3.jpg','../img/4.jpg'];
+				var textArr = ['文字一','文字二','文字三','文字四'];
+				var n = 0;
+				var flag = true;
+				
+				/*
+				 * 计算图片的数量及当前数量
+				 * 每张图片对应的文字切换
+				 * 下一张、上一张图片切换
+				 * 顺序、循环切换效果
+				 */
+				
+				//初始化
+				inital();
+				function inital() {
+					oImg.src = imgArr[n];
+					num.innerHTML = (n+1)+"/"+imgArr.length;
+					text.innerHTML = textArr[n];
+				}
+				
+				//按钮切换文字切换--循环切换
+				aBtn[0].onclick = function() {
+					flag = true;
+					oP[0].innerHTML = '图片可从最后一张跳转到第一张循环切换';
+				}
+				
+				//顺序切换
+				aBtn[1].onclick = function() {
+					flag = false;
+					oP[0].innerHTML = '顺序切换';
+				}
+				
+				
+				//上一张切换
+				oA[0].onclick = function() {
+					n--;
+					if(n<0) {
+//						循环切换
+						if(flag) {
+							n=imgArr.length-1;
+						}else {
+							//顺序切换
+							alert("已经是第一张");
+							n=0;
+						}
+					}
+					inital();
+				}
+				//下一张切换
+				oA[1].onclick = function() {
+					n++;
+					if(n==imgArr.length) {
+						if(flag) {
+							n=0;
+						}else {
+							alert("已经是最后一张");
+							n=imgArr.length-1;
+						}
+						
+					}
+					inital();
+				}
+			
+				
+				
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>miaov 2_1_3_3</title>
+	<style type="text/css">
+		img{
+			border: none;
+			cursor: pointer;
+		}
+		
+		span{
+			display: block;
+		}
+		
+		div{
+			width: 873px;
+			height: 551px;
+			background: url(../img/background.jpg);
+			position: relative;
+			margin: 0 auto;
+		}
+		
+		#left_img, #right_img, #previous, #next, #left_page, #right_page{
+			position: absolute;
+			top: 50px;
+			left: 30px;
+		
+		}
+		
+		#left_img, #right_img{
+			top: 108px;
+			/*background: url(../img/loader_ico.gif) no-repeat center;		/*初始化背景*/
+		}
+		
+		#left_img{
+			width: 450px;
+			height: 280px;
+			left: 50px;
+		}
+		
+		#right_img{
+			width: 250px;
+			height: 280px;
+			left: 560px;
+		}
+		
+		#previous, #next{
+			width: 80px;
+			height: 20px;
+			border: 1px solid #807F7F;
+			text-align: center;
+			line-height: 20px;
+			background: #F3F3F3;
+			border-radius: 50%;
+			cursor: pointer;
+		}
+		
+		#previous:hover, #next:hover{
+			background: #FFFFFF;
+		}
+		
+		#next{
+			left: 130px;
+		}
+		
+		#left_page, #right_page{
+			top: 390px;
+		}
+		
+		#left_page{
+			left: 50px;
+		}
+		
+		#right_page{
+			left: 546px;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<img id="left_img" src="" width="" height="" alt="">
+		<img id="right_img" src="" width="" height="" alt="">
+		<span id="previous">上一组</span>
+		<span id="next">下一组</span>
+		<span id="left_page">加载中......</span>
+		<span id="right_page">加载中......</span>
+	</div>
+	<script type="text/javascript">
+		window.onload = function () 
+		{
+			var oLeftImg = document.getElementById('left_img');
+			var oRightImg = document.getElementById('right_img');
+			var oPre = document.getElementById('previous');
+			var oNext = document.getElementById('next');
+			var oLeftPage = document.getElementById('left_page');
+			var oRightPage = document.getElementById('right_page');
+		
+			var l = 0;
+			var r = 0;
+			var arrLeft = ['../img/1.jpg','../img/2.jpg','../img/3.jpg','../img/4.jpg'];
+			var arrRight = ['../img/1.jpg','../img/2.jpg','../img/4.jpg'];
+		
+			//初始化
+			function origin () 
+			{
+				oLeftImg.src = arrLeft[l];
+				oLeftPage.innerHTML = l+1 + ' / ' + arrLeft.length;
+				oRightImg.src = arrRight[r];
+				oRightPage.innerHTML = r+1 + ' / ' + arrRight.length;
+			}
+			origin ();
+			//单击左边图片
+			oLeftImg.onclick = function () 
+			{
+				l ++;
+				if ( l == arrLeft.length )
+				{
+					l = 0;
+				}
+				origin ();
+			}
+			//单击右边图片
+			oRightImg.onclick = function () 
+			{
+				r ++;
+				if ( r == arrRight.length )
+				{
+					r = 0;
+				}
+				origin ();
+			}
+			//单击上一组
+			oPre.onclick = function () 
+			{
+				l --;
+				r --;
+		
+				if ( l == -1 )
+				{
+					l = arrLeft.length -1;
+				}
+		
+				if ( r == -1 )
+				{
+					r = arrRight.length -1;
+				}
+				origin ();
+			}
+			//单击下一组
+			oNext.onclick = function () 
+			{
+				l ++;
+				r ++;
+		
+				if ( l == arrLeft.length )
+				{
+					l = 0;
+				}
+		
+				if ( r == arrRight.length )
+				{
+					r = 0;
+				}
+				origin ();
+			}
+		};
+	</script>
+</body>
+</html>

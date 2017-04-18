@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>win10日历效果</title>
+		<style type="text/css">
+			* {margin: 0;padding: 0;list-style: none;}
+			li {float: left;width: 30px;height: 30px;text-align: center;line-height: 30px;}
+			#date {width: 406px;margin: 0 auto;overflow: hidden;padding: 25px 30px;background-color: #555450;}
+			.timer1 {height: 64px;font: 43px/64px "microsoft yahei";color: #fff;}
+			.timer2 {height: 38px;font: 18px/38px "microsoft yahei";color: #429ce3;}
+			.timer3 {height: 53px;color: #dddddc;margin: 15px 0;font: 25px/53px "microsoft yahei";}
+			.timer3 strong {float: left;font-weight: normal;}
+			.timer3 div {float: right;}
+			.timer3 div span {font-size: 45px;cursor: pointer;margin: 0 10px ;}
+			#date ul, .number {font-size: 0;}
+			#date ul li, .number span {width: 58px;height: 51px;font: 22px/51px "microsoft yahei";text-align: center;color: #fff;display: inline-block;}
+			.number span.color1 {color: #8d8c89;}
+			.number span.active {background: #0078d7;}
+		</style>
+	</head>
+	<body>
+		<div id="date">
+			<div class="timer1">14:29:02</div>
+			<div class="timer2">2016年10月09日，星期日</div>
+			<div class="timer3">
+				<strong>2016年9月</strong>
+				<div><span>∧</span><span>∨</span></div>
+			</div>
+			<ul>
+				<li>一</li>
+				<li>二</li>
+				<li>三</li>
+				<li>四</li>
+				<li>五</li>
+				<li>六</li>
+				<li>日</li>
+			</ul>
+			<div class="number">
+				<span class="color1">1</span>
+				<span class="color1">2</span>
+				<span class="color1">3</span>
+				<span>4</span>
+				<span>4</span>
+				<span class="active">6</span>
+				<span>7</span>
+	    		<span>8</span>
+	    		<span>9</span>
+	    		<span>10</span>
+	    		<span>11</span>
+	    		<span>12</span>
+	    		<span>13</span>
+	    		<span>14</span>
+	    		<span>15</span>
+	    		<span>16</span>
+	    		<span>17</span>
+	    		<span>18</span>
+	    		<span>19</span>
+	    		<span>20</span>
+	    		<span>21</span>
+	    		<span>22</span>
+	    		<span>23</span>
+	    		<span>24</span>
+	    		<span>25</span>
+	    		<span>26</span>
+	    		<span>27</span>
+	    		<span>28</span>
+	    		<span>29</span>
+	    		<span>30</span>
+			</div>
+		</div>
+		<script type="text/javascript">
+			window.onload = function() {
+				var timer1 = document.querySelector('.timer1');
+				var timer2 = document.querySelector('.timer2');
+				var strong = document.querySelector('.timer3 strong');
+				var number = document.querySelector('.number');
+				var btns = document.querySelectorAll('.timer3 span');
+				
+				getTime();
+				//即时时间
+				function getTime() {
+					var date = new Date();
+					timer1.innerHTML = format(date.getHours())+":"+format(date.getMinutes())+":"+format(date.getSeconds());
+				}
+				function format(v) {
+					return v>=10?v:"0"+v;
+				}
+				setInterval(getTime,1000);
+				
+				//星期
+				function formatWeek(v) {
+					return ['日','一','二','三','四','五','六'][v];
+				}
+				var d1 = new Date();
+				timer2.innerHTML = d1.getFullYear()+"年"+(d1.getMonth()+1)+"月"+d1.getDate()+"日，"+"星期"+formatWeek(d1.getDay());
+				
+				
+				
+				//获取到某个月的最后一天
+//				var d2 = new Date();
+//				d2.setDate(13);
+//				console.log(d2.setDate(0))
+//				d2.setDate(0);
+//				console.log(d2.getDate());
+				function getEndDay(year,month) {
+					return new Date(year,month,0).getDate();
+				}
+//				var result = getFirstWeek(2016,9);
+//				console.log(result);
+				
+				//获取到某个月的第一天是星期几
+				function getFirstWeek(year,month) {
+					return new Date(year,month-1,1).getDay();				
+				}
+				
+				var d = new Date();
+				setDate(d);
+				function setDate(d) {
+					var lastEndDay = getEndDay(d.getFullYear(),d.getMonth());
+					var curEndDay = getEndDay(d.getFullYear(),d.getMonth()+1);
+					var week = getFirstWeek(d.getFullYear(),d.getMonth()+1);
+					console.log(lastEndDay+","+curEndDay+','+week)
+					
+					var curDay = 1;
+					var str = '';
+					var endNum = week -1;
+					
+					if(endNum==0) {
+						endNum = 7;
+					}
+					
+					for(var i=0;i<42;i++) {
+						if(i<endNum) {
+							str = '<span class="color1">'+(lastEndDay--)+'</span>' + str;
+						}else if(i>=endNum+curEndDay) {
+							str += '<span class="color1">'+(curDay++)+'</span>';
+						}else {
+							var c1 = new Date().getDate()==(i-endNum+1)?'active':'';
+							if(d.getFullYear()!= new Date().getFullYear() || d.getMonth()!= new Date().getMonth()) {
+								c1='';
+							}
+							str+='<span class="'+c1+'">'+(i-endNum+1)+'</span>';
+						}
+					}
+					number.innerHTML = str;
+					
+					strong.innerHTML = d.getFullYear()+"年"+(d.getMonth()+1)+"月";
+				}
+				
+				btns[0].onclick = function() {
+					d.setMonth(d.getMonth()-1);
+					setDate(d);
+				}
+				btns[1].onclick = function() {
+					d.setMonth(d.getMonth()+1);
+					setDate(d);
+				}
+			}
+		</script>
+	</body>
+</html>

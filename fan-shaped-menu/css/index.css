@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+#canvas{
+    background: #000;
+}
+#nav{
+    width: 130px;
+    height: 400px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+#nav li{
+    position: absolute;
+    left: 0;
+    top: 0;
+    list-style: none;
+    transform-origin: 25px 375px;  /*旋转中心*/
+    box-shadow: 2px 2px 20px #000;
+    transition: 1s;
+    font-size: 0;
+}

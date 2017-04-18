@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+*{ margin:0; padding:0; border:none;}
+#content{ background:url(images/bg.jpg); width:615px;height:860px; margin:0 auto;position:relative;}
+#talk{height:417px; width:244px; position:absolute; top:120px; left:165px; overflow: auto; padding:20px;} 
+#footer{ height:30px; width:264px; position:absolute; top:577px; left:165px; line-height:50px; padding:10px; overflow:hidden;}
+#people{ width:30px; float:left;}
+#text{ height:26px; width:150px; float:left; margin:0 10px; padding:2px;}
+#btn{ height:30px; width:50px; float:left;}
+.box{ overflow:hidden; color:#FFF; font-family:"微软雅黑"; font-size:12px;}
+.imgBox{width:30px; border-radius:5px;}
+.line{ display:block; background: #390; line-height:30px; margin:0 10px; padding:0 10px;border-radius:5px}
+.a{ background:#96F}
+.fl{ float:left;}
+.fr{ float:right;}
+</style>
+<script>
+window.onload=function()
+{
+	var oText=document.getElementById('text');
+	var oBtn=document.getElementById('btn');
+	var oTalk=document.getElementById('talk');
+	var oImg=document.getElementById('people');
+	var onOff=true;
+	 
+	 oImg.onclick=function()
+	 {
+		if(onOff==true)
+		{
+			oImg.src='images/icon1.jpg'
+			onOff=false;
+		}
+		else
+		{
+			oImg.src='images/icon2.jpg';
+			onOff=true	;		
+		}
+	 }
+	 
+	
+	oBtn.onclick=function()
+	{
+		if(oText.value=='')
+		{alert('请输入内容')}
+		else if(onOff==false)
+		{
+			oTalk.innerHTML='<div class="box"><img  class="imgBox fl" src="images/icon1.jpg"><span class="line fl">'+oText.value+'</span></div>'+'<br />'+oTalk.innerHTML	;
+			oText.value='';
+		}
+		else 
+		{
+			oTalk.innerHTML='<div class="box"><img  class="imgBox fr" src="images/icon2.jpg"><span class="line fr a">'+oText.value+'</span></div>'+'<br />'+oTalk.innerHTML	;
+			oText.value='';	
+		}//innerHTML中可以加代码运行
+		
+	}	
+}
+</script>
+</head>
+
+<body>
+    <div id="content">
+        
+            <div id="talk">
+            
+            </div>
+            
+            <div id="footer">
+                <img  src="images/icon2.jpg" id="people">
+                <input type="text" id="text">
+                <input type="button" value="ok" id="btn">
+            </div>
+           
+    </div>
+</body>
+</html>

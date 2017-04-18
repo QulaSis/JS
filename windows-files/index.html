@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			h2{
+				margin: 0;
+			}
+			.clearfix:after{
+				content: '';
+				display: block;
+				clear: both;
+			}
+			#box{
+				width: 500px;
+				height: 500px;
+				border: 1px solid #1883d7;
+				position: absolute;
+				left: 0;
+				top: 0;
+				
+			}
+			#header{
+				width: 100%;
+				height: 39px;
+				border-bottom: 1px solid #dadbdc;
+			}
+			#header h2{
+				float: left;
+				font-size: 14px;
+				line-height: 39px;
+				padding-left: 10px;
+				font-weight: normal;
+			}
+			.action{
+				float: right;
+				font-size: 0;
+			}
+			.action span{
+				float: right;
+				display: block;
+				width: 58px;
+				height: 39px;
+			}
+			.action span:nth-of-type(1){
+				background: #fff url(images/ico_03.png) no-repeat center;
+			}
+			.action span:nth-of-type(1):hover{
+				background: #f00 url(images/ico_03.png) no-repeat center;
+			}
+			.action span:nth-of-type(2){
+				background: #fff url(images/ico_02.png) no-repeat center;
+			}
+			.action span:nth-of-type(2):hover{
+				background: #ccc url(images/ico_02.png) no-repeat center;
+			}
+			.action span:nth-of-type(3){
+				background: #fff url(images/ico_01.png) no-repeat center;
+			}
+			.action span:nth-of-type(3):hover{
+				background: #ccc url(images/ico_01.png) no-repeat center;
+			}
+			.action span.narrow{
+				background: #fff url(images/ico_04.png) no-repeat center;	
+			}
+			.action span.narrow:hover{
+				background: #ccc url(images/ico_04.png) no-repeat center;	
+			}
+			
+			#main{
+				height: 460px;
+				overflow: hidden;
+				position: relative;
+			}
+			#content{
+				padding: 10px;
+				font: 16px/20px "微软雅黑";
+				margin-right: 20px;
+				overflow: hidden;
+				position: absolute;
+				top: 0;
+			}
+			#scroll{
+				width: 20px;
+				position: absolute;
+				right: 0;
+				top: 0;
+			}
+			.up{
+				width: 20px;
+				height: 20px;
+				background: url(images/up_btn1.gif);
+			}
+			.bar{
+				width: 20px;
+				height: 300px;
+				background: #f0f0f0;
+				position: relative;
+			}
+			.slide{
+				height: 100px;
+				width: 20px;
+				background: #cdcdcd;
+				position: absolute;
+				top: 0;
+			}
+			.slide:hover{
+				background: #a6a6a6;
+			}
+			.down{
+				width: 20px;
+				height: 20px;
+				background: url(images/down_btn1.gif);
+			}
+			
+			.scale{
+				width: 500px !important;
+				height: 40px !important;
+				overflow: hidden;
+				top: auto !important;
+				bottom: 0;
+				left: 0 !important;
+			}
+		</style>
+		<script>
+			window.onload=function(){
+				var box=document.getElementById("box");
+				var content=document.getElementById("content");
+				var main=document.getElementById("main");
+				var header=document.getElementById("header");
+				var spans=document.querySelectorAll(".action span");
+				
+				//存一下box最初的位置，点击第二个按钮的时候能回到最初的状态
+				var boxOffset={
+					width:box.offsetWidth,
+					height:box.offsetHeight,
+					left:box.offsetLeft,
+					top:box.offsetTop
+				};
+				
+				//标签拖拽功能
+				header.onmousedown=function(ev){
+					//在鼠标按下的时候，要算出鼠标点的位置离box边界的位置
+					var disX=ev.clientX-box.offsetLeft;
+					var disY=ev.clientY-box.offsetTop;
+					
+					document.onmousemove=function(ev){
+						//在鼠标移动的时候，取到鼠标的坐标减去上面存的位置就是box移动的位置
+						var l=ev.clientX-disX;
+						var t=ev.clientY-disY;
+						
+						//如果l的值小于0，说明box已经超出浏览器左边的边界了，不能让他超出去，所以为0
+						if(l<0){
+							l=0;
+						}else if(l>document.documentElement.clientWidth-box.offsetWidth){
+							//如果l的值比可视区的宽度减去盒子的宽度的值还要大，说明已经要超过浏览器右侧边界了，要让他停在这个边界这
+							l=document.documentElement.clientWidth-box.offsetWidth;
+						}
+						
+						if(t<0){
+							t=0;
+						}else if(t>document.documentElement.clientHeight-box.offsetHeight){
+							t=document.documentElement.clientHeight-box.offsetHeight;
+						}
+						
+						box.style.left=l+'px';
+						box.style.top=t+'px';
+						
+						return false;
+					}
+					
+					document.onmouseup=function(){
+						//在鼠标抬起的时候，把move事件取消掉
+						this.onmousemove=null;
+					};
+				};
+				
+				
+				//最小化按钮
+				spans[2].onclick=function(ev){
+					box.className='scale';		//之所以Box能够最小化是由一个scale的class控制的
+					spans[1].className='narrow';	//最小化的时候，第二个按钮的图标也要换，由class决定
+					
+					//阻止拖拽功能（鼠标点击右边的功能按钮的时候，不能让box有拖拽）
+					ev.cancelBubble=true;
+					return false;
+				};
+				
+				//中间的按钮
+				spans[1].onclick=function(ev){
+					/*
+					 * 点击的时候分两种情况
+					 * 	1、图标是一个框
+					 * 		把box放到最大化
+					 * 	2、图标是两个框
+					 * 		把box回到原来的大小
+					 */
+					if(this.className==''){
+						//图标是一个框（放大）
+						/*
+						 * 让box的宽度为可视区的宽，让box的高为可视区的高，但是box身上有两个边框，所以要减去边框
+						 */
+						box.style.width=document.documentElement.clientWidth-2+'px';
+						box.style.height=document.documentElement.clientHeight-2+'px';
+						box.style.left=0;		//避免拖到中间后放大有问题
+						box.style.top=0;
+						
+						//main区域在放大后，它的高度也要跟着放大
+						main.style.height=box.clientHeight-40+'px';
+						
+						this.className='narrow';		//改第二个图标的样子
+					}else{
+						//图标是两个框（还原）
+						/*
+						 * 代码走这里的时候，要让box还原成原来的样式，就是取一上来存的box的值
+						 */
+						box.style.width=boxOffset.width+'px';
+						box.style.height=boxOffset.height+'px';
+						box.style.left=boxOffset.left+'px';
+						box.style.top=boxOffset.top+'px';
+						main.style.height='460px';
+						
+						//还原后，把它们身上的class都去掉，这些class都是放大后的样式
+						this.className='';
+						box.className='';
+					}
+					
+					setSlideHeigh();		//不管放大还是缩小都要重置一下滚动条的尺寸
+					
+					ev.cancelBubble=true;	//阻止事件冒泡
+					return false;			//阻止浏览器默认行为（不懂的可以去掉，看一下效果）
+				};
+				
+				//关闭按钮
+				spans[0].onclick=function(ev){
+					document.body.removeChild(box);
+					
+					ev.cancelBubble=true;
+					return false;
+				};
+				
+				
+				
+				//滚动条内容
+				var scroll=document.getElementById("scroll");
+				var up=document.querySelector(".up");
+				var bar=document.querySelector(".bar");
+				var down=document.querySelector(".down");
+				var slide=document.querySelector(".slide");
+				var t=0;				//滑块走了多高
+				var canScall=true;		//决定滚轮能不能滚，由内容的高度来决定，内容小的话就不需要滚动
+				
+				//设置滑块的高度，由内容决定
+				/*
+				 * 用文字的高度除以文字外层的高度，得出来的是超出的倍数
+				 * 超出的倍数越大，右侧的滑块越小，比例是相反的
+				 * 用文字外层的高度除以比例就算出来滑块的高度
+				 */
+				function setSlideHeigh(){
+					//一上来要设置一下滑块区域的高度，它的高度要自动算出来
+					bar.style.height=main.offsetHeight-up.offsetHeight*2+'px';
+					var scale=content.offsetHeight/main.offsetHeight;
+					
+					if(scale<=1){
+						slide.style.display='none';
+						canScall=false;		//如果内容区域没有外层的距离高，所以就不用滚动了
+					}else if(scale>=20){
+						scale=20;
+					}else{
+						slide.style.display='block';
+						canScall=true;
+					}
+					
+					slide.style.height=main.offsetHeight/scale+'px';
+				}
+				setSlideHeigh();
+				
+				//滑块走的最大距离
+				var maxHeight=bar.offsetHeight-slide.offsetHeight;
+				
+				//滑块点击
+				slide.onclick=function(ev){
+					ev.cancelBubble=true;
+				}
+				//滑块的拖拽功能，与上面的拖拽是一样的原理，只不过只有Y轴方向的拖拽
+				slide.onmousedown=function(ev){
+					var disY=ev.clientY-slide.offsetTop;
+					
+					document.onmousemove=function(ev){
+						t=ev.clientY-disY;
+						
+						moveTo();
+					};
+					
+					document.onmouseup=function(){
+						this.onmousemove=null;
+					};
+					
+					
+					return false;
+				};
+				
+				//滚动主体内容，因为点上下按钮，鼠标滚动，点击滑块区域都要让滚动条动，所以写一下函数。滑块走多远是由变量t决定的，所以在进行这些操作的时候，只用改t的值再调用一下这个函数就可以
+				function moveTo(){
+					if(t<0){
+						t=0;
+					}else if(t>maxHeight){
+						t=maxHeight;
+					}
+					
+					//这个值是滑块在它的区域里走的比例，用走的距离除以总的距离就算出走的比例，滚动条走的比例与内容走的比例是一样的，算出一个比例就可以算出内容区域走的距离
+					var scalce=t/maxHeight;
+					
+					//拿内容能够走的最大距离乘以比例就能算出走的距离
+					content.style.top=-(content.offsetHeight-main.offsetHeight)*scalce+'px';
+					
+					slide.style.top=t+'px';
+				}
+				
+				myScroll(box,function(){
+					//鼠标往上滚动的时候，让t不断的减
+					if(!canScall)return;	//如果这个值为false的话，就不需要滚轮滚动了
+					t-=10;
+					moveTo();
+				},function(){
+					//鼠标往上滚动的时候，让t不断的减
+					if(!canScall)return;
+					t+=10;
+					moveTo();
+				});
+				
+				//下箭头
+				down.onmousedown=function(){
+					timer=setInterval(function(){
+						t+=5;
+						moveTo();
+					},16);
+				}
+				//上箭头
+				up.onmousedown=function(){
+					timer=setInterval(function(){
+						t-=5;
+						moveTo();
+					},16);
+				}
+				
+				down.onmouseup=function(){
+					clearInterval(timer);
+				}
+				up.onmouseup=function(){
+					clearInterval(timer);
+				}
+				
+				//滚动条区域点击
+				bar.onclick=function(ev){
+					//需要判断一下鼠标点击的位置是在滑块的上面还是下面
+					if(ev.clientY<slide.getBoundingClientRect().top){
+						t-=50;
+						moveTo();
+					}else{
+						t+=50;
+						moveTo();
+					}
+				}
+				
+				//滚轮事件
+				function myScroll(obj,upFn,downFn){
+					obj.onmousewheel=fn;		//IE/Chrom
+					obj.addEventListener('DOMMouseScroll',fn);		//FF(必需用addEventListener添加)
+					
+					function fn(ev){
+						/*
+						 *  mousewheel		IE/Chrom
+						 * 		滚动方向：event.wheelDelta
+						 * 				上：120
+						 * 				下：-120
+						 * 
+						 * 	DOMMouseScroll	FF(必需用addEventListener添加)
+						 * 		滚动方向：event.detail
+						 * 				上：-3
+						 * 				下：3
+						 */
+						if(ev.wheelDelta>0 || ev.detail<0){
+							upFn.call(obj);
+						}else{
+							downFn.call(obj);
+						}
+						
+						ev.preventDefault();
+						return false;
+					}
+				};
+			};
+		</script>
+	</head>
+	<body>
+		<div id="box">
+			<div id="header" class="clearfix">
+				<h2>此电脑</h2>
+				<div class="action">
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+			</div>
+			<div id="main" class="clearfix">
+				<div id="content">
+					已知仙王：九天无终、轮回、仙僧王、鲲鹏王、真龙、蛄祖、九叶剑草、天下第二、仙金道人、边荒七王、黑暗柳神、孟天正、王长生、小蚂蚁、小石头、石毅、十冠王、谪仙、赤龙、白麒麟；仙域盘王、混元、敖晟、太始、元初、与荒对峙的六仙王、斩杀洛摩的女子、禁区之主、金色骨掌、水晶头骨、滴血眼球、金毛犼王、虎乌怪、白虎王、三尊金乌王、鲁谷、老怪物、混沌青莲、齐虞、九头怪、屠夫、卖假药；葬域霍恒、翰卓、养鸡、葬主；异域洛摩、鹤无双，安澜、俞陀、赤王、无殇、蒲魔王、紫金葫芦主人、五张法旨代表、吞天老祖、昆谛；界海瞿忡、刀王、堕落古兽、十九头怪仙帝（仙道至尊，不朽之帝，葬帝）：可炼制仙源，封印仙道高手，战斗的余波能瞬间覆灭无数仙域那种大界。从古至今走上这条路的有九多成毙命。准仙帝自身就蒙蔽天机，无论过去、现在或殒落后都带着迷雾，让人难以看透，荒和灭世老人所谓的蜕变，强大而完满的躯体，不能长期保持住。想要真正圆满走向仙帝境，是非常危险的，这条路艰险到让人绝望，仙帝独有的帝之场域，能逆溯时间将敌人限制在寂静时空中，脱离不了这个点。红尘仙是大段位囊括完美所有仙的境界仙王（不朽之王，葬王）：真正长生不死，肉身不朽，元神不灭，修成仙王体能让体魄更强。极难杀死，除非用特殊方法。若有人念其真名就会被他们感知，会有异象显化。具体可划分为准仙王、十凶层次、一般仙王、绝顶仙王、仙王绝颠、巨头、无上巨头、仙王极限（如九头怪）、无上仙王极限（如十九头怪）、接近准仙帝的仙王九幽獓：新十凶之首，头颅形似狼头，头有一双巨大而古朴的灰质牛角，眉心有竖眼。身上长满黑色鳞片，背生九尾，每条尾巴末端都生有1颗不算大的凶兽头颅形似龙头，后人为宇无敌，始祖为灭世老人真龙：原十凶之首，真龙族亦称为仙王之族，每头真龙成长到最后都会成为仙王，很多种族都可朝真龙进化，可即使数十条并存于世，最终往往也只有一条能夺得唯一真名。仙古年间有两条龙争夺龙之真名，失败者天下第二在天兽森林中养伤。有黑暗魔龙投靠异域（已被蛄祖斩杀），真龙遗子葛沽拜石昊为师鲲鹏：可鱼可鸟为最强鹏类，巢穴在荒域中北海，仙古一战重伤垂死在乱古初被仙殿与其他道统真仙伏击而殇。女鲲鹏将儿子鲲鹏子放于混沌中几百万年才出世。鹏子真身号称不灭生灵和齐道临交好。鹏子主身进入三千州禁区，次身位于罪州雷帝：雷灵族盖世强者，荒在元天秘境中发现他的痕迹，可能来源于神秘地区，掌握仙道法则能演化雷劫主宰众生
+				</div>
+				<div id="scroll">
+					<div class="up"></div>
+					<div class="bar"><div class="slide"></div></div>
+					<div class="down"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

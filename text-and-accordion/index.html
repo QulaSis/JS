@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<script>
+			window.onload=function(){
+				var xLine=document.querySelector(".xLine");
+				var yLine=document.querySelector(".yLine");
+				var dls=document.querySelectorAll("#third dl");
+				
+				xLine.style.transform='scale(1)';
+				yLine.style.transform='scale(1)';
+				
+				
+				//添加事件结束相关函数
+				yLine.addEventListener('transitionend',function(){
+					//文字的运动要在线的运动完成后去运动
+					for(var i=0;i<dls.length;i++){
+						dls[i].style.transform='scale(1)';
+					}
+				});
+				
+				
+				//手风琴
+				/*var lis=document.querySelectorAll("li");
+				var lastLi=lis[0];		//存一下上一个有宽度的li
+				for(var i=0;i<lis.length;i++){
+					lis[i].onmouseover=function(){
+						for(var i=0;i<lis.length;i++){
+							lis[i].children[1].style.width=0;
+						}
+						
+						this.children[1].style.width='224px';
+					}
+				}*/
+				
+				
+				
+				
+				/*var lis=document.querySelectorAll("li");
+				var lastLi=lis[0];
+				
+				for(var i=0;i<lis.length;i++){
+					lis[i].onmouseover=function(){
+						lastLi.children[1].style.width=0;
+						this.children[1].style.width='224px';
+						
+						lastLi=this;
+					};
+				}*/
+				
+				
+				
+				
+				var imgs=document.querySelectorAll("img");
+				var lastDiv=imgs[0].nextElementSibling;
+				
+				for(var i=0;i<imgs.length;i++){
+					imgs[i].onmouseover=function(){
+						lastDiv.style.width=0;
+						this.nextElementSibling.style.width='224px';
+						
+						lastDiv=this.nextElementSibling;
+					};
+				}
+				
+				
+				
+				
+			}
+		</script>
+	</head>
+	<body>
+		
+		<section id="third">
+			<div class="header">
+				<h2>四大亮点在线学</h2>
+				<div class="line"></div>
+				<h3>一步一步成为 web 大前端高手</h3>
+			</div>
+			<div class="text">
+				<dl>
+					<dt>①精品录播</dt>
+					<dd>
+						根据课程难度，一周1~3个章节的速度，学员须在一周内完成规定的章节学习。课程后会有作业给到学员
+					</dd>
+				</dl>
+				<dl>
+					<dt>②在线直播</dt>
+					<dd>
+						每周不少于两次直播课程，答疑解惑，辅导作业，带领项目。
+					</dd>
+				</dl>
+				<dl>
+					<dt>③教学管理</dt>
+					<dd>
+						助教老师会监督管理学员学习状况，包括作业是否上交，直播课是否参加等。
+					</dd>
+				</dl>
+				<dl>
+					<dt>④技术辅导</dt>
+					<dd>
+						学习期间，任何技术问题都可以询问讲师，包括内部学习QQ群、学习平台、微信等。讲师还会不定期给大家提供额外的技术案例分享。
+					</dd>
+				</dl>
+				<div class="xLine"></div>
+				<div class="yLine"></div>
+			</div>
+		</section>
+		<section id="photo">
+			<ul class="clear">
+				<li>
+					<img src="img/photo_01.jpg"/>
+					<div>
+						<dl>
+							<dt>认识讲师</dt>
+							<dd>
+								<p>你看到的，你所认同的，在这里都将被实现。学习艰辛，我们一路同行</p>
+							</dd>
+						</dl>
+						<a href="javascript:;"></a>
+					</div>
+				</li>
+				<li>
+					<img src="img/photo_02.jpg"/>
+					<div>
+						<dl>
+							<dt>教学管理</dt>
+							<dd>
+								<p>或许看上去不会那么"友善"，甚至略微苛刻，我们相信您也期待一个新的学习体验。</p>
+							</dd>
+						</dl>
+						<a href="javascript:;"></a>
+					</div>
+				</li>
+				<li>
+					<img src="img/photo_03.jpg"/>
+					<div>
+						<dl>
+							<dt>学员反馈</dt>
+							<dd>
+								<p>没有慷慨且煽情的言语，甚至不连贯的语句也测证"剧本"的可信赖性。"简单可依赖"，不只是一句口号。</p>
+							</dd>
+						</dl>
+						<a href="javascript:;"></a>
+					</div>
+				</li>
+			</ul>
+		</section>
+	</body>
+</html>

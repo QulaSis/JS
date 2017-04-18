@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        li{
+            list-style: none;
+        }
+        #box{
+            width: 504px;
+            height: 64px;
+            background: url("img/tipBg.gif") no-repeat 250px 12px;
+            border: 1px solid #000000;
+            margin: 50px auto 0;
+        }
+
+        #marking span{
+            display: inline-block;
+            color: red;
+            text-indent: 10px;
+        }
+        #marking span strong{
+            display: inline-block;
+            font: 18px/64px "宋体";
+            color: #000000;
+            text-indent: 0;
+        }
+
+        ul{
+            padding: 23px 0;
+        }
+        ul img{
+            width: 18px;
+            height: 18px;
+        }
+        ul li{
+            float: left;
+            cursor: pointer;
+        }
+
+        #marked{
+        }
+        #marked span{
+            display: inline-block;
+            font: 18px/64px "宋体";
+            color: #de6b00;
+            width: 60px;
+            text-align: center;
+        }
+
+        .fl{
+            float: left;
+        }
+        .clear{
+            *zoom: 1;
+        }
+        .clear:after{
+            content: "";
+            display: block;
+            clear: both;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+
+            var oUl = document.getElementsByTagName("ul")[0];
+            var aLi = oUl.getElementsByTagName("li");
+            var aImg = oUl.getElementsByTagName("img");
+            var arrImg = ["img/空.png","img/灰色.png","img/绿色.png"];
+            var arrText = ["差","较差","还行","好","力荐"];
+
+            var oMarked = document.getElementById("marked");
+            var oSpan = oMarked.getElementsByTagName("span")[0];
+            var that ;
+
+            //初始化
+            function fn1(){
+                for(var i = 0;i < aImg.length;i++){
+                    aImg[i].src = arrImg[0];
+                }
+            }
+            fn1();
+            for(var i = 0;i < aLi.length;i++){
+
+                aLi[i].index = i;
+                aLi[i].onmouseover = function () {
+
+                    fn1();
+                    if( this.index < 2 ){
+                        for(var j = 0;j <= this.index;j++){
+                            aImg[j].src = arrImg[1];
+                            oSpan.innerHTML = arrText[j];
+                        }
+                    }else{
+                        for(var j = 0;j <= this.index;j++){
+                            aImg[j].src = arrImg[2];
+                            oSpan.innerHTML = arrText[j];
+                        }
+                    }
+                };
+
+                aLi[i].onclick = function () {
+
+                    that = this.index;
+                    fn1();
+                    if( this.index < 2 ){
+                        for(var j = 0;j <= this.index;j++){
+                            aImg[j].src = arrImg[1];
+                            oSpan.innerHTML = arrText[j];
+                        }
+                    }else{
+                        for(var j = 0;j <= this.index;j++){
+                            aImg[j].src = arrImg[2];
+                            oSpan.innerHTML = arrText[j];
+                        }
+                    }
+                };
+
+                aLi[i].onmouseout = function () {
+                    fn1();
+                    if( that<2 ){
+                        for(var j = 0;j <= that;j++){
+                            aImg[j].src = arrImg[1];
+                        }
+                    }else{
+                        for(var j = 0;j <= that;j++){
+                            aImg[j].src = arrImg[2];
+                        }
+                    }
+                    oSpan.innerHTML = arrText[that];
+                };
+            }
+
+        }
+    </script>
+</head>
+<body>
+    <div id="box" class="clear">
+        <div id="marking" class="fl">
+            <span>*<strong>总体评分:</strong></span>
+        </div>
+        <ul class="clear fl">
+            <li><img src="" /></li>
+            <li><img src="" /></li>
+            <li><img src="" /></li>
+            <li><img src="" /></li>
+            <li><img src="" /></li>
+        </ul>
+        <div id="marked" class="fl">
+            <span>未评价</span>
+        </div>
+    </div>
+</body>
+</html>

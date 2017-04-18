@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+*{
+    margin: 0;
+    padding: 0;
+}
+#imgWrap{
+    width: 800px;
+    height: 480px;
+    margin: 80px auto;
+    perspective: 800px;
+}
+#imgWrap img{
+    height: 80px;
+    width: 80px;
+    float: left;
+}
+#btn{
+    clear: both;
+    text-align: center;
+    width: 100px;
+    font: 16px/40px "Mircosoft yahei";
+    color: #fff;
+    background: rgb(0,100,0);
+    padding: 0 20px;
+    margin: 0 auto;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}

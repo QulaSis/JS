@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>酷炫照片墙</title>
+        <link rel="stylesheet" href="css/style.css"/>
+    </head>
+    <body>
+        <div id="imgWrap">
+            <img src="images/1.jpg" alt=""/>
+            <img src="images/2.jpg" alt=""/>
+            <img src="images/3.jpg" alt=""/>
+            <img src="images/4.jpg" alt=""/>
+            <img src="images/5.jpg" alt=""/>
+            <img src="images/6.jpg" alt=""/>
+            <img src="images/7.jpg" alt=""/>
+            <img src="images/8.jpg" alt=""/>
+            <img src="images/9.jpg" alt=""/>
+            <img src="images/10.jpg" alt=""/>
+            <img src="images/11.jpg" alt=""/>
+            <img src="images/12.jpg" alt=""/>
+            <img src="images/13.jpg" alt=""/>
+            <img src="images/14.jpg" alt=""/>
+            <img src="images/15.jpg" alt=""/>
+            <img src="images/16.jpg" alt=""/>
+            <img src="images/17.jpg" alt=""/>
+            <img src="images/18.jpg" alt=""/>
+            <img src="images/19.jpg" alt=""/>
+            <img src="images/20.jpg" alt=""/>
+            <img src="images/29.jpg" alt=""/>
+            <img src="images/32.jpg" alt=""/>
+            <img src="images/3.jpg" alt=""/>
+            <img src="images/34.jpg" alt=""/>
+            <img src="images/31.jpg" alt=""/>
+            <img src="images/40.jpg" alt=""/>
+            <img src="images/47.jpg" alt=""/>
+            <img src="images/8.jpg" alt=""/>
+            <img src="images/49.jpg" alt=""/>
+            <img src="images/10.jpg" alt=""/>
+            <img src="images/1.jpg" alt=""/>
+            <img src="images/2.jpg" alt=""/>
+            <img src="images/3.jpg" alt=""/>
+            <img src="images/4.jpg" alt=""/>
+            <img src="images/5.jpg" alt=""/>
+            <img src="images/6.jpg" alt=""/>
+            <img src="images/7.jpg" alt=""/>
+            <img src="images/8.jpg" alt=""/>
+            <img src="images/9.jpg" alt=""/>
+            <img src="images/10.jpg" alt=""/>
+            <img src="images/11.jpg" alt=""/>
+            <img src="images/12.jpg" alt=""/>
+            <img src="images/13.jpg" alt=""/>
+            <img src="images/14.jpg" alt=""/>
+            <img src="images/15.jpg" alt=""/>
+            <img src="images/16.jpg" alt=""/>
+            <img src="images/17.jpg" alt=""/>
+            <img src="images/18.jpg" alt=""/>
+            <img src="images/19.jpg" alt=""/>
+            <img src="images/20.jpg" alt=""/>
+            <img src="images/29.jpg" alt=""/>
+            <img src="images/32.jpg" alt=""/>
+            <img src="images/3.jpg" alt=""/>
+            <img src="images/34.jpg" alt=""/>
+            <img src="images/31.jpg" alt=""/>
+            <img src="images/40.jpg" alt=""/>
+            <img src="images/47.jpg" alt=""/>
+            <img src="images/8.jpg" alt=""/>
+            <img src="images/49.jpg" alt=""/>
+            <img src="images/10.jpg" alt=""/>
+        </div>
+        <div id="btn">点击查看</div>
+        <script>
+            /*
+             * 运动的步骤
+             * 1.闪的效果（瞬间宽高变为0，scale，随机）
+             * 2.图片从小变到大，透明度有1变为0（必须是上步效果走完才变）
+             * 3.图片旋转，同时透明度从0变为1,有层次感（translate）（挡所有图片透明度都变0时，才会走这一步）
+             */
+
+            var btn = document.getElementById("btn");
+            var imgs = document.querySelectorAll("img");
+            var on = true;   //用来决定用户是否可以再次点击(true 可以点击 反之不可以)
+
+            //btn 添加点击事件
+            btn.onclick = function(){
+                if(!on){
+                    return;
+                }
+                on = false;
+
+                var endNum = 0;   //运动完成的图片数目
+                var allEnd = 0;   //用来判断所有的图片是否都运动完了
+                for(var i=0;i<imgs.length;i++){
+                    (function(i){
+                        setTimeout(function(){
+                            montion(imgs[i],'10ms',function(){
+                                this.style.transform = 'scale(0)';
+                            },function(){//第二个运动
+                                montion(this,'1s',function(){
+                                    this.style.transform = 'scale(1)';
+                                    this.style.opacity = 0;
+                                },function(){
+                                    endNum++;   //只要有一张图走完，就加一
+                                    if(endNum == imgs.length){
+                                        toBig();
+                                    }
+                                });
+                            });
+                        },Math.random()*1000);
+                    })(i)
+                }
+
+                //这个函数做第三个效果
+                function toBig(){
+                    /*
+                     * 坐标轴
+                     * x轴 平行地面
+                     * y轴 垂直地面
+                     * z轴 垂直屏幕
+                     */
+
+                    for(var i=0;i<imgs.length;i++){
+                        imgs[i].style.transition = '';
+                        // 想要物体有CSS3的效果 需要给个初始值
+                        imgs[i].style.transform = 'rotateY(0deg) translateZ(-'+Math.random()*500+'px)';
+
+                        //函数自执行  想要在循环里面找到i的值
+                        (function(i){
+                            setTimeout(function(){
+                                montion(imgs[i],'2s',function(){
+                                    this.style.opacity = 1;
+                                    this.style.transform = 'rotateY(-360deg) translateZ(0)';
+                                },function(){
+                                    allEnd++;
+                                    if(allEnd == imgs.length){//这个条件成立说明图片都运动完了，可以再次点击
+                                        on = true;  //当所有运动完了以后才可以再次点击
+                                    }
+                                });
+                            },Math.random()*1000);
+                        })(i)
+                    }
+                }
+            };
+
+            //运动函数 （运动对象，运动时间，运动的属性函数，运动完成后要做的事）
+            function montion(obj,time,doFn,callBack){
+                obj.style.transition = time;
+                doFn.call(obj);   //call调用函数，并且this的指向给obj
+
+                var called = false;  //解决transition调用多次的bug
+
+                //ontransitionend 是监听 css3 中 transition 过渡结束的事件
+                obj.addEventListener("transitionend",function(){
+                    if(!called){
+                        callBack && callBack.call(obj);
+                        called = true;
+                    }
+                },false);  //fasle 在冒泡阶段捕获
+            }
+
+        </script>
+    </body>
+</html>
